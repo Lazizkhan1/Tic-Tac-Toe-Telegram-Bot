@@ -4,7 +4,6 @@ from private_variables import BOT_TOKEN
 from telebot import TeleBot, types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from strings import *
-# from database_mehods import User
 
 mydb = mysql.connector.connect(
     host="localhost",
