@@ -5,13 +5,13 @@ pwb = {'en': '❌ Play with bot 🤖', 'uz': "❌ Bot bilan o'ynash 🤖", 'ru':
 pwf = {'en': '👥 Play with friend ⭕', 'uz': "👥 Do'stingiz bilan o'ynash ⭕", 'ru': "👥 Играй с другом ⭕"}
 
 diff = {'en': '👶 Difficulty 😈', 'uz': '👶 Qiyinchilik 😈', 'ru': '👶 Сложность 😈'}
-difficulty_text = {'en': "Choose difficulty\n\n*Current difficulty:*",
+difficulty_text = {'en': "Choose difficulty_\n\n*Current difficulty_:*",
                    'uz': "Qiyinlikni tanlang\n\n*Hozirgi qiyinlik*",
                    'ru': "Выберите сложность\n\n*Текущая сложность:*"}
 
-diff_btn = {'en': {'easy': '👶 Easy 👶', 'medium': '👱 Medium 👱', 'hard': '😈 Hard 😈'},
-            'uz': {'easy': '👶 Oson 👶', 'medium': "👱 O'rtacha 👱", 'hard': '😈 Qiyin 😈'},
-            'ru': {'easy': '👶 Легкий 👶', 'medium': '👱 Средний 👱', 'hard': '😈 Сложный 😈'}}
+diff_btn = {'en': {'easy': '🐣 Easy 👶', 'medium': '👩 Medium 👱', 'hard': '💀 Hard 😈'},
+            'uz': {'easy': '🐣 Oson 👶', 'medium': "👩 O'rtacha 👱", 'hard': '💀 Qiyin 😈'},
+            'ru': {'easy': '🐣 Легкий 👶', 'medium': '👩 Средний 👱', 'hard': '💀 Сложный 😈'}}
 
 
 lang = {'en': '🇺🇿 Language 🇺🇿', 'uz': '🇺🇿 Til 🇺🇿', 'ru': '🇺🇿 Язык 🇺🇿'}
