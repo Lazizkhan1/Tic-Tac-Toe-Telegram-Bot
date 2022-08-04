@@ -1,26 +1,27 @@
 stats_db = {}
 a = 9
-pwb = {'en': '❌ Play with bot 🤖', 'uz': "❌ Bot bilan o'ynash 🤖", 'ru': "❌ Играть с ботом 🤖"}
+pwb_btn = {'en': '❌ Play with bot 🤖', 'uz': "❌ Bot bilan o'ynash 🤖", 'ru': "❌ Играть с ботом 🤖"}
+choose_letter_txt = {'en': '\nChoose your side:', 'uz': '\nBelgini tanlang:', 'ru': '\nВыбери свою сторону:'}
 
-pwf = {'en': '👥 Play with friend ⭕', 'uz': "👥 Do'stingiz bilan o'ynash ⭕", 'ru': "👥 Играй с другом ⭕"}
+pwf_btn = {'en': '👥 Play with friend ⭕', 'uz': "👥 Do'stingiz bilan o'ynash ⭕", 'ru': "👥 Играй с другом ⭕"}
 
-diff = {'en': '👶 Difficulty 😈', 'uz': '👶 Qiyinchilik 😈', 'ru': '👶 Сложность 😈'}
-difficulty_text = {'en': "Choose difficulty_\n\n*Current difficulty_:*",
+diff_btn = {'en': '👶 Difficulty 😈', 'uz': '👶 Qiyinchilik 😈', 'ru': '👶 Сложность 😈'}
+difficulty_txt = {'en': "Choose difficulty_\n\n*Current difficulty_:*",
                    'uz': "Qiyinlikni tanlang\n\n*Hozirgi qiyinlik*",
                    'ru': "Выберите сложность\n\n*Текущая сложность:*"}
 
-diff_btn = {'en': {'easy': '🐣 Easy 👶', 'medium': '👩 Medium 👱', 'hard': '💀 Hard 😈'},
+difficulty_btn = {'en': {'easy': '🐣 Easy 👶', 'medium': '👩 Medium 👱', 'hard': '💀 Hard 😈'},
             'uz': {'easy': '🐣 Oson 👶', 'medium': "👩 O'rtacha 👱", 'hard': '💀 Qiyin 😈'},
             'ru': {'easy': '🐣 Легкий 👶', 'medium': '👩 Средний 👱', 'hard': '💀 Сложный 😈'}}
 
 
-lang = {'en': '🇺🇿 Language 🇺🇿', 'uz': '🇺🇿 Til 🇺🇿', 'ru': '🇺🇿 Язык 🇺🇿'}
+lang_btn = {'en': '🇺🇿 Language 🇺🇿', 'uz': '🇺🇿 Til 🇺🇿', 'ru': '🇺🇿 Язык 🇺🇿'}
 lang_text = {'en': 'Choose language', 'uz': "Tilni tanlang", 'ru': 'Выберите язык'}
 
-stats__ = {'en': '🆔 Stats 📊 ', 'uz': '🆔 Statistika 📊 ', 'ru': '🆔 Статистика 📊'}
+stats_btn = {'en': '🆔 Stats 📊 ', 'uz': '🆔 Statistika 📊 ', 'ru': '🆔 Статистика 📊'}
 stats_txt = {}
 
-help__ = {'en': 'ℹ️ Help ℹ️', 'uz': 'ℹ️ Yordam ℹ️', 'ru': 'ℹ️ Помощь ℹ️'}
+help_btn = {'en': 'ℹ️ Help ℹ️', 'uz': 'ℹ️ Yordam ℹ️', 'ru': 'ℹ️ Помощь ℹ️'}
 help_txt = {'en': """*Controls*
 Interact with the bot only via a received keyboard.
 
@@ -54,6 +55,7 @@ Biz yozilgan xabarlarni saqlamaymiz, agar savolingiz bo'lsa menga yozing @lazizk
 
 *О боте*
 Мы не храним историю чатов, поэтому, если у вас есть вопросы или комментарии, напишите мне @lazizkhan1"""}
+
 
 
 def change_stats() -> dict:

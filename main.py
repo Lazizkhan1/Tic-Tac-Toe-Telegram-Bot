@@ -4,6 +4,7 @@ from private_variables import BOT_TOKEN
 from telebot import TeleBot, types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from strings import *
+from random import choice
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -13,13 +14,19 @@ mydb = mysql.connector.connect(
 )
 mycursor = mydb.cursor()
 bot = TeleBot(BOT_TOKEN)
+player = None
+computer = None
+game_running = True
 user_ = None
 user_id = None
+chat_id = None
 lang_ = None
 difficulty_ = None
+random_ = False
 temp_message = None
 temp_markup = None
 temp_text = None
+compMove = None
 
 available_languages = ['uz', 'en', 'ru']
 
@@ -42,19 +49,20 @@ def exist_user() -> None:
              'username': u[1],
              'first_name': u[2],
              'language': u[3],
-             'difficulty': u[4]}
+             'difficulty_': u[4]}
     lang_ = user_['language']
-    difficulty_ = user_['difficulty']
+    difficulty_ = user_['difficulty_']
     update_stats()
 
 
 def new_user(u) -> None:
-    global user_, stats_
+    global user_, stats_, difficulty_
+    difficulty_ = 'easy'
     user_ = {'id': u.id,
              'username': u.username,
              'first_name': u.first_name,
              'language': u.language_code if u.language_code in available_languages else 'en',
-             'difficulty': 'easy'}
+             'difficulty_': difficulty_}
     stats_db.update({'easy': [0, 0, 0],
                      'medium': [0, 0, 0],
                      'hard': [0, 0, 0]})
@@ -62,7 +70,7 @@ def new_user(u) -> None:
             """
     INSERT INTO users VALUES(%d, "%s", "%s", "%s", "%s")"""
             % (user_['id'], user_['username'], user_['first_name'],
-                user_['language'], user_['difficulty']))
+                user_['language'], user_['difficulty_']))
     mycursor.execute(f"INSERT INTO easy VALUES({user_}, 0, 0, 0)")
     mycursor.execute(f"INSERT INTO medium VALUES({user_}, 0, 0, 0)")
     mycursor.execute(f"INSERT INTO hard VALUES({user_}, 0, 0, 0)")
@@ -72,18 +80,14 @@ def new_user(u) -> None:
 def update_stats() -> None:
     mycursor.execute(f'SELECT win, draw, loose draw FROM easy WHERE id = {user_id}')
     _ = mycursor.fetchall()[0]
-    print(_)
     stats_db.update({'easy': [_[0], _[1], _[2]]})
     mycursor.execute(f'SELECT win, draw, loose FROM medium WHERE id = {user_id}')
     _ = mycursor.fetchall()[0]
-    print(_)
     stats_db.update({'medium': [_[0], _[1], _[2]]})
     mycursor.execute(f'SELECT win, draw, loose FROM hard WHERE id = {user_id}')
     _ = mycursor.fetchall()[0]
-    print(_)
     stats_db.update({'hard': [_[0], _[1], _[2]]})
     change_stats()
-    print(stats_txt[lang_])
 
 
 def update_language(lng: str) -> None:
@@ -95,7 +99,7 @@ def update_language(lng: str) -> None:
 
 def update_difficulty(diff_) -> None:
     global difficulty_
-    mycursor.execute(f"UPDATE users SET difficulty = '{diff_}' WHERE id = {user_id}")
+    mycursor.execute(f"UPDATE users SET difficulty_ = '{diff_}' WHERE id = {user_id}")
     mydb.commit()
     difficulty_ = diff_
 
@@ -137,14 +141,26 @@ def wrong_message():
         text=temp_text,
         reply_markup=temp_markup,
         parse_mode='markdown')
+# =================================================
+
+
+# ==========markup methods==========
+
+def choose_letter_markup():
+    global temp_markup
+    menu = InlineKeyboardMarkup(row_width=2)
+    menu.add(InlineKeyboardButton(text='❌', callback_data='❌'),
+             InlineKeyboardButton(text='⭕️', callback_data='⭕️'))
+
+    return menu
 
 
 def difficulty_markup():
     global temp_markup
     menu = InlineKeyboardMarkup(row_width=1)
-    menu.add(InlineKeyboardButton(text=diff_btn[lang_]['easy'], callback_data='easy'),
-             InlineKeyboardButton(text=diff_btn[lang_]['medium'], callback_data='medium'),
-             InlineKeyboardButton(text=diff_btn[lang_]['hard'], callback_data='hard'), )
+    menu.add(InlineKeyboardButton(text=difficulty_btn[lang_]['easy'], callback_data='easy'),
+             InlineKeyboardButton(text=difficulty_btn[lang_]['medium'], callback_data='medium'),
+             InlineKeyboardButton(text=difficulty_btn[lang_]['hard'], callback_data='hard'), )
     temp_markup = menu
     return menu
 
@@ -162,11 +178,11 @@ def language_markup():
 def help_markup():
     global temp_markup
     menu = InlineKeyboardMarkup(row_width=1)
-    menu.add(InlineKeyboardButton(text=pwb[lang_], callback_data='pwb'),
-             InlineKeyboardButton(text=pwf[lang_], callback_data='pwf'),
-             InlineKeyboardButton(text=diff[lang_], callback_data='diff'),
-             InlineKeyboardButton(text=lang[lang_], callback_data='lang'),
-             InlineKeyboardButton(text=stats__[lang_], callback_data='stats'))
+    menu.add(InlineKeyboardButton(text=pwb_btn[lang_], callback_data='pwb'),
+             InlineKeyboardButton(text=pwf_btn[lang_], callback_data='pwf'),
+             InlineKeyboardButton(text=diff_btn[lang_], callback_data='diff'),
+             InlineKeyboardButton(text=lang_btn[lang_], callback_data='lang'),
+             InlineKeyboardButton(text=stats_btn[lang_], callback_data='stats'))
     temp_markup = menu
     return menu
 
@@ -174,11 +190,11 @@ def help_markup():
 def stats_markup():
     global temp_markup
     menu = InlineKeyboardMarkup(row_width=1)
-    menu.add(InlineKeyboardButton(text=pwb[lang_], callback_data='pwb'),
-             InlineKeyboardButton(text=pwf[lang_], callback_data='pwf'),
-             InlineKeyboardButton(text=diff[lang_], callback_data='diff'),
-             InlineKeyboardButton(text=lang[lang_], callback_data='lang'),
-             InlineKeyboardButton(text=help__[lang_], callback_data='help'))
+    menu.add(InlineKeyboardButton(text=pwb_btn[lang_], callback_data='pwb'),
+             InlineKeyboardButton(text=pwf_btn[lang_], callback_data='pwf'),
+             InlineKeyboardButton(text=diff_btn[lang_], callback_data='diff'),
+             InlineKeyboardButton(text=lang_btn[lang_], callback_data='lang'),
+             InlineKeyboardButton(text=help_btn[lang_], callback_data='help'))
 
     temp_markup = menu
     return menu
@@ -186,17 +202,30 @@ def stats_markup():
 
 
 # ==========telegram methods==========
+#primary_method
+@bot.callback_query_handler(func=lambda call: call.data == 'pwb')
+def play_with_bot(call):
+    global temp_message, temp_text
+    temp_text = difficulty_btn[lang_][difficulty_] + choose_letter_txt[lang_]
+    temp_message = bot.edit_message_text(
+        text=temp_text,
+        chat_id=temp_message.chat.id,
+        message_id=temp_message.id,
+        reply_markup=choose_letter_markup())
+
+
+#primary_method
 @bot.callback_query_handler(func=lambda call: call.data == 'diff')
 def difficulty(call):
     global temp_message, temp_text
+    temp_text = difficulty_txt[lang_] + difficulty_btn[lang_][difficulty_]
     temp_message = bot.edit_message_text(
-        text=difficulty_text[lang_] + diff_btn[lang_][difficulty_],
+        text=temp_text,
         chat_id=temp_message.chat.id,
         message_id=temp_message.id,
         reply_markup=difficulty_markup(),
         parse_mode='markdown'
     )
-    temp_text = difficulty_text[lang_] + diff_btn[lang_][difficulty_]
 
 
 @bot.callback_query_handler(func=lambda call: call.data in ['easy', 'medium', 'hard'])
@@ -207,15 +236,17 @@ def change_difficulty(call):
     stats_menu(0)
 
 
+#primary_method
 @bot.callback_query_handler(func=lambda call: call.data == 'lang')
 def language(call):
     global temp_message, temp_text
+    temp_text = lang_text[lang_]
     temp_message = bot.edit_message_text(
         chat_id=temp_message.chat.id,
         message_id=temp_message.id,
-        text=lang_text[lang_],
+        text=temp_text,
         reply_markup=language_markup())
-    temp_text = lang_text[lang_]
+
 
 
 @bot.callback_query_handler(func=lambda call: call.data in ['uz', 'en', 'ru'])
@@ -224,27 +255,30 @@ def change_lang(call):
     help_menu(0)
 
 
+#primary_method
 @bot.callback_query_handler(func=lambda call: call.data == 'stats')
 def stats_menu(call):
     global temp_message, temp_text
+    temp_text = stats_txt[lang_]
     temp_message = bot.edit_message_text(
         chat_id=temp_message.chat.id,
         message_id=temp_message.id,
-        text=stats_txt[lang_],
+        text=temp_text,
         reply_markup=stats_markup())
-    temp_text = stats_txt[lang_]
 
 
+#primary_method
 @bot.callback_query_handler(func=lambda call: call.data == 'help')
 def help_menu(call):
     global temp_message, temp_text
+    temp_text = help_txt[lang_]
     temp_message = bot.edit_message_text(
         chat_id=temp_message.chat.id,
         message_id=temp_message.id,
-        text=help_txt[lang_],
+        text=temp_text,
         reply_markup=help_markup(),
         parse_mode='markdown')
-    temp_text = help_txt[lang_]
+
 
 
 
