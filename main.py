@@ -150,7 +150,7 @@ def send_help():
         chat_id=chat_id,
         text=temp_text,
         reply_markup=help_markup(),
-        parse_mode='markdown')
+        parse_mode='HTML')
 
 
 
@@ -165,7 +165,7 @@ def wrong_message():
         chat_id=temp_message.chat.id,
         text=temp_text,
         reply_markup=temp_markup,
-        parse_mode='markdown')
+        parse_mode='HTML')
 # =================================================
 
 
@@ -227,7 +227,7 @@ def help_markup():
     global temp_markup
     menu = InlineKeyboardMarkup(row_width=1)
     menu.add(InlineKeyboardButton(text=pwb_btn[lang_], callback_data='pwb'),
-             InlineKeyboardButton(text=pwf_btn[lang_], callback_data='pwf'),
+             InlineKeyboardButton(text=pwf_btn[lang_], callback_data='pwf', switch_inline_query='play'),
              InlineKeyboardButton(text=diff_btn[lang_], callback_data='diff'),
              InlineKeyboardButton(text=lang_btn[lang_], callback_data='lang'),
              InlineKeyboardButton(text=stats_btn[lang_], callback_data='stats'))
@@ -239,7 +239,7 @@ def stats_markup():
     global temp_markup
     menu = InlineKeyboardMarkup(row_width=1)
     menu.add(InlineKeyboardButton(text=pwb_btn[lang_], callback_data='pwb'),
-             InlineKeyboardButton(text=pwf_btn[lang_], callback_data='pwf'),
+             InlineKeyboardButton(text=pwf_btn[lang_], callback_data='pwf', switch_inline_query='play'),
              InlineKeyboardButton(text=diff_btn[lang_], callback_data='diff'),
              InlineKeyboardButton(text=lang_btn[lang_], callback_data='lang'),
              InlineKeyboardButton(text=help_btn[lang_], callback_data='help'))
@@ -447,7 +447,7 @@ def difficulty(call):
         chat_id=temp_message.chat.id,
         message_id=temp_message.id,
         reply_markup=difficulty_markup(),
-        parse_mode='markdown'
+        parse_mode='HTML'
     )
 
 
@@ -509,7 +509,7 @@ def help_menu(call):
         message_id=temp_message.id,
         text=temp_text,
         reply_markup=help_markup(),
-        parse_mode='markdown')
+        parse_mode='HTML')
 
 
 @bot.message_handler(func=lambda message: True)
