@@ -12,6 +12,10 @@ mydb = mysql.connector.connect(
     passwd="P@ssW0rd",
     database='telegram_bot'
 )
+board = {
+    1: '⬜', 2: '⬜', 3: '⬜',
+    4: '⬜', 5: '⬜', 6: '⬜',
+    7: '⬜', 8: '⬜', 9: '⬜'}
 mycursor = mydb.cursor()
 bot = TeleBot(BOT_TOKEN)
 player = None
@@ -117,16 +121,25 @@ def is_user_exist(id: int) -> bool:
 
 
 # ==========static methods==========
-
-
-def send_help(message):
+def send_board():
     global temp_message, temp_text
+    temp_text = f"{difficulty_btn[lang_][difficulty_]}\n{board_txt[lang_] + player}"
+    temp_message = bot.edit_message_text(
+        message_id=temp_message.id,
+        chat_id=chat_id,
+        text=temp_text,
+        reply_markup=board_markup())
+
+
+def send_help():
+    global temp_message, temp_text
+    temp_text = help_txt[lang_]
     temp_message = bot.send_message(
-        chat_id=message.chat.id,
-        text=help_txt[lang_],
+        chat_id=chat_id,
+        text=temp_text,
         reply_markup=help_markup(),
         parse_mode='markdown')
-    temp_text = help_txt[lang_]
+
 
 
 def wrong_message():
@@ -151,7 +164,23 @@ def choose_letter_markup():
     menu = InlineKeyboardMarkup(row_width=2)
     menu.add(InlineKeyboardButton(text='❌', callback_data='❌'),
              InlineKeyboardButton(text='⭕️', callback_data='⭕️'))
+    temp_markup = menu
+    return menu
 
+
+def board_markup():
+    global temp_markup
+    menu = InlineKeyboardMarkup(row_width=3)
+    menu.add(InlineKeyboardButton(text=board[1], callback_data='1'),
+             InlineKeyboardButton(text=board[2], callback_data='2'),
+             InlineKeyboardButton(text=board[3], callback_data='3'),
+             InlineKeyboardButton(text=board[4], callback_data='4'),
+             InlineKeyboardButton(text=board[5], callback_data='5'),
+             InlineKeyboardButton(text=board[6], callback_data='6'),
+             InlineKeyboardButton(text=board[7], callback_data='7'),
+             InlineKeyboardButton(text=board[8], callback_data='8'),
+             InlineKeyboardButton(text=board[9], callback_data='9'))
+    temp_markup = menu
     return menu
 
 
@@ -212,6 +241,17 @@ def play_with_bot(call):
         chat_id=temp_message.chat.id,
         message_id=temp_message.id,
         reply_markup=choose_letter_markup())
+
+
+@bot.callback_query_handler(func=lambda call: call.data in ['❌', '⭕️'])
+def assign_letters(call):
+    global player, computer
+
+    if call.data == '❌':
+        player, computer = '❌', '⭕️'
+        send_board()
+    else:
+        computer, player = '❌', '⭕️'
 
 
 #primary_method
@@ -284,12 +324,13 @@ def help_menu(call):
 
 @bot.message_handler(func=lambda message: True)
 def send_message(message):
-
+    global chat_id
+    chat_id = message.chat.id
     if user_ is None:
         initialize_user(message.from_user)
 
     if temp_message is None:
-        send_help(message)
+        send_help()
     else:
         wrong_message()
 # =================================================

@@ -3,6 +3,7 @@ a = 9
 pwb_btn = {'en': '❌ Play with bot 🤖', 'uz': "❌ Bot bilan o'ynash 🤖", 'ru': "❌ Играть с ботом 🤖"}
 choose_letter_txt = {'en': '\nChoose your side:', 'uz': '\nBelgini tanlang:', 'ru': '\nВыбери свою сторону:'}
 
+board_txt = {'en': 'You are playing as ', 'uz': 'Sizning belgingiz ', 'ru': 'Вы играете как '}
 pwf_btn = {'en': '👥 Play with friend ⭕', 'uz': "👥 Do'stingiz bilan o'ynash ⭕", 'ru': "👥 Играй с другом ⭕"}
 
 diff_btn = {'en': '👶 Difficulty 😈', 'uz': '👶 Qiyinchilik 😈', 'ru': '👶 Сложность 😈'}
