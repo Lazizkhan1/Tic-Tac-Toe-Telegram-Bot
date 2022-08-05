@@ -37,12 +37,14 @@ available_languages = ['uz', 'en', 'ru']
 
 # ==========database methods==========
 def initialize_user(tg_user) -> None:
-    global user_id
+    global user_id, compMove
     user_id = tg_user.id
     if is_user_exist(user_id):
         exist_user()
     else:
         new_user(tg_user)
+    comp_move_difficulty('easy')
+
 
 
 def exist_user() -> None:
@@ -53,9 +55,9 @@ def exist_user() -> None:
              'username': u[1],
              'first_name': u[2],
              'language': u[3],
-             'difficulty_': u[4]}
+             'difficulty': u[4]}
     lang_ = user_['language']
-    difficulty_ = user_['difficulty_']
+    difficulty_ = user_['difficulty']
     update_stats()
 
 
@@ -66,7 +68,7 @@ def new_user(u) -> None:
              'username': u.username,
              'first_name': u.first_name,
              'language': u.language_code if u.language_code in available_languages else 'en',
-             'difficulty_': difficulty_}
+             'difficulty': difficulty_}
     stats_db.update({'easy': [0, 0, 0],
                      'medium': [0, 0, 0],
                      'hard': [0, 0, 0]})
@@ -74,7 +76,7 @@ def new_user(u) -> None:
             """
     INSERT INTO users VALUES(%d, "%s", "%s", "%s", "%s")"""
             % (user_['id'], user_['username'], user_['first_name'],
-                user_['language'], user_['difficulty_']))
+                user_['language'], user_['difficulty']))
     mycursor.execute(f"INSERT INTO easy VALUES({user_}, 0, 0, 0)")
     mycursor.execute(f"INSERT INTO medium VALUES({user_}, 0, 0, 0)")
     mycursor.execute(f"INSERT INTO hard VALUES({user_}, 0, 0, 0)")
@@ -103,7 +105,7 @@ def update_language(lng: str) -> None:
 
 def update_difficulty(diff_) -> None:
     global difficulty_
-    mycursor.execute(f"UPDATE users SET difficulty_ = '{diff_}' WHERE id = {user_id}")
+    mycursor.execute(f"UPDATE users SET difficulty = '{diff_}' WHERE id = {user_id}")
     mydb.commit()
     difficulty_ = diff_
 
@@ -121,6 +123,16 @@ def is_user_exist(id: int) -> bool:
 
 
 # ==========static methods==========
+def comp_move_difficulty(diff):
+    global compMove
+    if diff == 'easy':
+        compMove = Easy.compMove
+    elif diff == 'medium':
+        compMove = Medium.compMove
+    else:
+        compMove = Hard.compMove
+
+
 def send_board():
     global temp_message, temp_text
     temp_text = f"{difficulty_btn[lang_][difficulty_]}\n{board_txt[lang_] + player}"
@@ -158,6 +170,13 @@ def wrong_message():
 
 
 # ==========markup methods==========
+def update_board_markup(message):
+    global temp_message
+    temp_message = bot.edit_message_reply_markup(
+        chat_id=message.chat.id,
+        message_id=message.id,
+        reply_markup=board_markup())
+
 
 def choose_letter_markup():
     global temp_markup
@@ -230,6 +249,155 @@ def stats_markup():
 # =================================================
 
 
+# ==========Tic-tac-toe logic==========
+class Easy:
+    @staticmethod
+    def compMove():
+        rand_turn = choice(list(board.keys()))
+        while not is_space_empty(rand_turn):
+            rand_turn = choice(list(board.keys()))
+        insertLetter(computer, rand_turn)
+
+
+
+class Hard:
+    @staticmethod
+    def compMove():
+        bestScore = -800
+        bestMove = 0
+        for key in board.keys():
+            if board[key] == '⬜':
+                board[key] = computer
+                score = minimax(board, False)
+                board[key] = '⬜'
+                if score > bestScore:
+                    bestScore = score
+                    bestMove = key
+        insertLetter(computer, bestMove)
+
+
+class Medium(Hard, Easy):
+    @staticmethod
+    def compMove():
+
+        global random_
+        if not random_:
+            Hard.compMove()
+        else:
+            Easy.compMove()
+        random_ = not random_
+
+
+def minimax(board, isMaximizing):
+    if check_win(computer):
+        return 1
+    elif check_win(player):
+        return -1
+    elif checkDraw():
+        return 0
+    if isMaximizing:
+        bestScore = -800
+        for key in board.keys():
+            if board[key] == '⬜':
+                board[key] = computer
+                score = minimax(board, False)
+                board[key] = '⬜'
+                if score > bestScore:
+                    bestScore = score
+        return bestScore
+    else:
+        bestScore = 800
+        for key in board.keys():
+            if board[key] == '⬜':
+                board[key] = player
+                score = minimax(board, True)
+                board[key] = '⬜'
+                if score < bestScore:
+                    bestScore = score
+        return bestScore
+
+
+def is_space_empty(key):
+    return board[key] == '⬜'
+
+
+def insertLetter(letter, position):
+    board[position] = letter
+    update_board_markup(temp_message)
+
+    if check_win(letter):
+        send_result(letter=letter)
+    elif checkDraw():
+        send_result(draw=True)
+
+
+
+def check_win(mark):
+    if board[1] == board[2] and board[1] == board[3] and board[1] == mark:
+        return True
+    elif board[4] == board[5] and board[4] == board[6] and board[4] == mark:
+        return True
+    elif board[7] == board[8] and board[7] == board[9] and board[7] == mark:
+        return True
+    elif board[1] == board[4] and board[1] == board[7] and board[1] == mark:
+        return True
+    elif board[2] == board[5] and board[2] == board[8] and board[2] == mark:
+        return True
+    elif board[3] == board[6] and board[3] == board[9] and board[3] == mark:
+        return True
+    elif board[1] == board[5] and board[1] == board[9] and board[1] == mark:
+        return True
+    elif board[7] == board[5] and board[7] == board[3] and board[7] == mark:
+        return True
+    else:
+        return False
+
+
+def send_result(letter=None, draw=False):
+    global temp_message, game_running
+    game_running = False
+    text = ""
+
+    if draw:
+        text = result_txt[lang_]['draw']
+        update_result('draw')
+    else:
+        if computer == letter:
+            text = result_txt[lang_]['loose']
+            update_result('loose')
+        else:
+            text = result_txt[lang_]['win']
+            update_result('win')
+
+    bot.edit_message_text(
+        chat_id=temp_message.chat.id,
+        message_id=temp_message.id,
+        text=f"{difficulty_btn[lang_][difficulty_]}\n\n{board[1] + board[2] + board[3]}\n{board[4] + board[5] + board[6]}\n{board[7] + board[8] + board[9]}\n\n{text} ")
+
+    clear_board()
+    temp_message = None
+    stats_menu(0)
+
+def checkDraw():
+    for key in board.keys():
+        if board[key] == '⬜':
+            return False
+    return True
+
+
+def clear_board():
+    for key in board.keys():
+        board[key] = '⬜'
+
+
+def randomMove():
+    rand_turn = choice(board.keys())
+    if is_space_empty(rand_turn):
+        insertLetter(computer, choice(board.keys()))
+
+# =================================================
+
+
 # ==========telegram methods==========
 #primary_method
 @bot.callback_query_handler(func=lambda call: call.data == 'pwb')
@@ -245,13 +413,28 @@ def play_with_bot(call):
 
 @bot.callback_query_handler(func=lambda call: call.data in ['❌', '⭕️'])
 def assign_letters(call):
-    global player, computer
+    global player, computer, game_running, random_, compMove
+    game_running = True
 
     if call.data == '❌':
         player, computer = '❌', '⭕️'
-        send_board()
+        random_ = True
     else:
         computer, player = '❌', '⭕️'
+        compMove()
+        comp_move_difficulty(difficulty_)
+    send_board()
+
+
+@bot.callback_query_handler(func=lambda call: call.data in ['1', '2', '3', '4', '5', '6', '7', '8', '9'] and call.message.id == temp_message.id)
+def update_board(call):
+    key = int(call.data)
+    if is_space_empty(key):
+        insertLetter(player, key)
+        if game_running:
+            compMove()
+    else:
+        bot.answer_callback_query(call.id, text=not_empty_txt[lang_], show_alert=True)
 
 
 #primary_method
@@ -270,9 +453,10 @@ def difficulty(call):
 
 @bot.callback_query_handler(func=lambda call: call.data in ['easy', 'medium', 'hard'])
 def change_difficulty(call):
-    global difficulty_
+    global difficulty_, compMove
     difficulty_ = call.data
-    update_difficulty(call.data)
+    comp_move_difficulty(difficulty_)
+    update_difficulty(difficulty_)
     stats_menu(0)
 
 
@@ -300,11 +484,19 @@ def change_lang(call):
 def stats_menu(call):
     global temp_message, temp_text
     temp_text = stats_txt[lang_]
-    temp_message = bot.edit_message_text(
-        chat_id=temp_message.chat.id,
-        message_id=temp_message.id,
-        text=temp_text,
-        reply_markup=stats_markup())
+    if temp_message is None:
+        temp_message = bot.send_message(
+            chat_id=chat_id,
+            text="    " + temp_text,
+            reply_markup=stats_markup(),
+            parse_mode='HTML')
+    else:
+        temp_message = bot.edit_message_text(
+            chat_id=temp_message.chat.id,
+            message_id=temp_message.id,
+            text="    " + temp_text,
+            reply_markup=stats_markup(),
+            parse_mode='HTML')
 
 
 #primary_method
@@ -318,8 +510,6 @@ def help_menu(call):
         text=temp_text,
         reply_markup=help_markup(),
         parse_mode='markdown')
-
-
 
 
 @bot.message_handler(func=lambda message: True)

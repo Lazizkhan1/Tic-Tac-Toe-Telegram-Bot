@@ -7,14 +7,21 @@ board_txt = {'en': 'You are playing as ', 'uz': 'Sizning belgingiz ', 'ru': 'В�
 pwf_btn = {'en': '👥 Play with friend ⭕', 'uz': "👥 Do'stingiz bilan o'ynash ⭕", 'ru': "👥 Играй с другом ⭕"}
 
 diff_btn = {'en': '👶 Difficulty 😈', 'uz': '👶 Qiyinchilik 😈', 'ru': '👶 Сложность 😈'}
-difficulty_txt = {'en': "Choose difficulty_\n\n*Current difficulty_:*",
-                   'uz': "Qiyinlikni tanlang\n\n*Hozirgi qiyinlik*",
-                   'ru': "Выберите сложность\n\n*Текущая сложность:*"}
+difficulty_txt = {'en': "Choose difficulty\n\n*Current difficulty:*",
+                  'uz': "Qiyinlikni tanlang\n\n*Hozirgi qiyinlik*",
+                  'ru': "Выберите сложность\n\n*Текущая сложность:*"}
 
 difficulty_btn = {'en': {'easy': '🐣 Easy 👶', 'medium': '👩 Medium 👱', 'hard': '💀 Hard 😈'},
-            'uz': {'easy': '🐣 Oson 👶', 'medium': "👩 O'rtacha 👱", 'hard': '💀 Qiyin 😈'},
-            'ru': {'easy': '🐣 Легкий 👶', 'medium': '👩 Средний 👱', 'hard': '💀 Сложный 😈'}}
+                  'uz': {'easy': '🐣 Oson 👶', 'medium': "👩 O'rtacha 👱", 'hard': '💀 Qiyin 😈'},
+                  'ru': {'easy': '🐣 Легкий 👶', 'medium': '👩 Средний 👱', 'hard': '💀 Сложный 😈'}}
 
+not_empty_txt = {'en': '🚫 This spot is not empty 🚫', 'uz': "🚫 Bu joy bo'sh emas 🚫", 'ru': '🚫 Это место не пусто 🚫'}
+result_txt = {'en':
+                  {'win': "🏆 You won! 🏆", 'loose': "😭 You lost! 😭", 'draw': "⚖️ Draw! ⚖️"},
+              'uz':
+                  {'win': "🏆 Siz yutdingiz! 🏆", 'loose': "😭 Siz yutqazdingiz! 😭", 'draw': "⚖️ Durang! ⚖️"},
+              'ru':
+                  {'win': "🏆 Вы выиграл! 🏆", 'loose': "😭 Вы проиграл! 😭", 'draw': "⚖️ Ничья! ⚖️"}, }
 
 lang_btn = {'en': '🇺🇿 Language 🇺🇿', 'uz': '🇺🇿 Til 🇺🇿', 'ru': '🇺🇿 Язык 🇺🇿'}
 lang_text = {'en': 'Choose language', 'uz': "Tilni tanlang", 'ru': 'Выберите язык'}
@@ -58,40 +65,38 @@ Biz yozilgan xabarlarni saqlamaymiz, agar savolingiz bo'lsa menga yozing @lazizk
 Мы не храним историю чатов, поэтому, если у вас есть вопросы или комментарии, напишите мне @lazizkhan1"""}
 
 
-
 def change_stats() -> dict:
     global stats_txt
     stats_txt.update({
-    'en':  """
-        Stats
-      🏆     ⚖️     😭
-👶: %s        %s        %s
-👱: %s        %s        %s
-😈: %s        %s        %s
-""" % (stats_db['easy'][0], stats_db['easy'][1], stats_db['easy'][2],
+        'en': """
+<code>       Stats
+
+     🏆     ⚖️     😭
+👶:{:>4}{:>4}{:>4}
+👱:{:>4}{:>4}{:>4}
+😈:{:>4}{:>4}{:>4}</code>
+""".format(stats_db['easy'][0], stats_db['easy'][1], stats_db['easy'][2],
        stats_db['medium'][0], stats_db['medium'][1], stats_db['medium'][2],
        stats_db['hard'][0], stats_db['hard'][1], stats_db['hard'][2]),
 
-    'uz':  """
-        Statistika
-      🏆     ⚖️     😭
-👶: %s        %s        %s
-👱: %s        %s        %s
-😈: %s        %s        %s
-""" % (stats_db['easy'][0], stats_db['easy'][1], stats_db['easy'][2],
+        'uz': """
+<code>       Statistika
+
+     🏆     ⚖️     😭
+👶:{:>4}{:>4}{:>4}
+👱:{:>4}{:>4}{:>4}
+😈:{:>4}{:>4}{:>4}</code>
+""".format(stats_db['easy'][0], stats_db['easy'][1], stats_db['easy'][2],
        stats_db['medium'][0], stats_db['medium'][1], stats_db['medium'][2],
        stats_db['hard'][0], stats_db['hard'][1], stats_db['hard'][2]),
 
-'ru':  """
-        Статистка
-      🏆     ⚖️     😭
-👶: %s        %s        %s
-👱: %s        %s        %s
-😈: %s        %s        %s
-""" % (stats_db['easy'][0], stats_db['easy'][1], stats_db['easy'][2],
+        'ru': """
+<code>       Статистка
+
+     🏆     ⚖️     😭
+👶:{:>4}{:>4}{:>4}
+👱:{:>4}{:>4}{:>4}
+😈:{:>4}{:>4}{:>4}</code>
+""".format(stats_db['easy'][0], stats_db['easy'][1], stats_db['easy'][2],
        stats_db['medium'][0], stats_db['medium'][1], stats_db['medium'][2],
-       stats_db['hard'][0], stats_db['hard'][1], stats_db['hard'][2]),
-
-
-})
-
+       stats_db['hard'][0], stats_db['hard'][1], stats_db['hard'][2])})
