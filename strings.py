@@ -7,9 +7,9 @@ board_txt = {'en': 'You are playing as ', 'uz': 'Sizning belgingiz ', 'ru': 'В�
 pwf_btn = {'en': '👥 Play with friend ⭕', 'uz': "👥 Do'stingiz bilan o'ynash ⭕", 'ru': "👥 Играй с другом ⭕"}
 
 diff_btn = {'en': '👶 Difficulty 😈', 'uz': '👶 Qiyinchilik 😈', 'ru': '👶 Сложность 😈'}
-difficulty_txt = {'en': "Choose difficulty\n\n*Current difficulty:*",
-                  'uz': "Qiyinlikni tanlang\n\n*Hozirgi qiyinlik*",
-                  'ru': "Выберите сложность\n\n*Текущая сложность:*"}
+difficulty_txt = {'en': "Choose difficulty\n\nCurrent difficulty:",
+                  'uz': "Qiyinlikni tanlang\n\nHozirgi qiyinlik",
+                  'ru': "Выберите сложность\n\nТекущая сложность:"}
 
 difficulty_btn = {'en': {'easy': '🐣 Easy 👶', 'medium': '👩 Medium 👱', 'hard': '💀 Hard 😈'},
                   'uz': {'easy': '🐣 Oson 👶', 'medium': "👩 O'rtacha 👱", 'hard': '💀 Qiyin 😈'},
@@ -30,38 +30,38 @@ stats_btn = {'en': '🆔 Stats 📊 ', 'uz': '🆔 Statistika 📊 ', 'ru': '�
 stats_txt = {}
 
 help_btn = {'en': 'ℹ️ Help ℹ️', 'uz': 'ℹ️ Yordam ℹ️', 'ru': 'ℹ️ Помощь ℹ️'}
-help_txt = {'en': """*Controls*
+help_txt = {'en': """<b>Controls</b>
 Interact with the bot only via a received keyboard.
 
-*How-to play*
+<b>How-to play</b>
 During a game you will get a keyboard with buttons which represent board squares. Press ⬜️ to make turn.
 
-*Multiplayer*
+<b>Multiplayer</b>
 After 5 minutes the game will become expired and the message will be replaced by ⌛️
 
-*About*
-We don't store chat history, so if you have questions or comments text me @lazizkhan1""", 'uz': """*O'ynash*
+<b>About</b>
+We don't store chat history, so if you have questions or comments text me @lazizkhan1""", 'uz': """<b>O'ynash</b>
 Bot bilan faqat berilgan klaviaturada ishlatishingiz mumkin.
 
-*Qanday o'ynash*
+<b>Qanday o'ynash</b>
 O'yin paytida sizga katakchalarga mos tugmachalar beriladi. Yurish uchun ⬜️ tugmasini bosing.
 
-*Multiplyer*
+<b>Multiplyer</b>
 Agar o'yin 5-minut ichida tugamasa o'yin o'chiriladi, xabarlar esa boshqaga almashtirildi.
 
-*Bot haqida*
+<b>Bot haqida</b>
 Biz yozilgan xabarlarni saqlamaymiz, agar savolingiz bo'lsa menga yozing @lazizkhan1
 
-""", 'ru': """*Управление*
+""", 'ru': """<b>Управление</b>
 Взаимодействуйте с ботом только через полученную клавиатуру.
 
-*Как играть*
+<b>Как играть</b>
 Во время игры вы получите клавиатуру с кнопками, которые представляют собой квадраты доски. Нажмите ⬜️, чтобы повернуть.
 
-*Мультиплеер*
+<b>Мультиплеер</b>
 Через 5 минут срок действия игры истечет, а сообщение будет заменено на ⌛️
 
-*О боте*
+<b>О боте</b>
 Мы не храним историю чатов, поэтому, если у вас есть вопросы или комментарии, напишите мне @lazizkhan1"""}
 
 
