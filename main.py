@@ -37,14 +37,13 @@ available_languages = ['uz', 'en', 'ru']
 
 # ==========database methods==========
 def initialize_user(tg_user) -> None:
-    global user_id, compMove
+    global user_id
     user_id = tg_user.id
     if is_user_exist(user_id):
         exist_user()
     else:
         new_user(tg_user)
     comp_move_difficulty('easy')
-
 
 
 def exist_user() -> None:
@@ -377,6 +376,8 @@ def send_result(letter=None, draw=False):
     clear_board()
     temp_message = None
     stats_menu(0)
+    comp_move_difficulty('easy')
+
 
 def checkDraw():
     for key in board.keys():
@@ -413,7 +414,7 @@ def play_with_bot(call):
 
 @bot.callback_query_handler(func=lambda call: call.data in ['❌', '⭕️'])
 def assign_letters(call):
-    global player, computer, game_running, random_, compMove
+    global player, computer, game_running, random_
     game_running = True
 
     if call.data == '❌':
