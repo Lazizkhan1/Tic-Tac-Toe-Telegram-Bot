@@ -36,18 +36,12 @@ Interact with the bot only via a received keyboard.
 <b>How-to play</b>
 During a game you will get a keyboard with buttons which represent board squares. Press ⬜️ to make turn.
 
-<b>Multiplayer</b>
-After 5 minutes the game will become expired and the message will be replaced by ⌛️
-
 <b>About</b>
 We don't store chat history, so if you have questions or comments text me @lazizkhan1""", 'uz': """<b>O'ynash</b>
 Bot bilan faqat berilgan klaviaturada ishlatishingiz mumkin.
 
 <b>Qanday o'ynash</b>
 O'yin paytida sizga katakchalarga mos tugmachalar beriladi. Yurish uchun ⬜️ tugmasini bosing.
-
-<b>Multiplyer</b>
-Agar o'yin 5-minut ichida tugamasa o'yin o'chiriladi, xabarlar esa boshqaga almashtirildi.
 
 <b>Bot haqida</b>
 Biz yozilgan xabarlarni saqlamaymiz, agar savolingiz bo'lsa menga yozing @lazizkhan1
@@ -57,9 +51,6 @@ Biz yozilgan xabarlarni saqlamaymiz, agar savolingiz bo'lsa menga yozing @lazizk
 
 <b>Как играть</b>
 Во время игры вы получите клавиатуру с кнопками, которые представляют собой квадраты доски. Нажмите ⬜️, чтобы повернуть.
-
-<b>Мультиплеер</b>
-Через 5 минут срок действия игры истечет, а сообщение будет заменено на ⌛️
 
 <b>О боте</b>
 Мы не храним историю чатов, поэтому, если у вас есть вопросы или комментарии, напишите мне @lazizkhan1"""}

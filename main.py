@@ -31,7 +31,6 @@ temp_message = None
 temp_markup = None
 temp_text = None
 compMove = None
-
 available_languages = ['uz', 'en', 'ru']
 
 
@@ -72,10 +71,10 @@ def new_user(u) -> None:
                      'medium': [0, 0, 0],
                      'hard': [0, 0, 0]})
     mycursor.execute(
-            """
+        """
     INSERT INTO users VALUES(%d, "%s", "%s", "%s", "%s")"""
-            % (user_['id'], user_['username'], user_['first_name'],
-                user_['language'], user_['difficulty']))
+        % (user_['id'], user_['username'], user_['first_name'],
+           user_['language'], user_['difficulty']))
     mycursor.execute(f"INSERT INTO easy VALUES({user_}, 0, 0, 0)")
     mycursor.execute(f"INSERT INTO medium VALUES({user_}, 0, 0, 0)")
     mycursor.execute(f"INSERT INTO hard VALUES({user_}, 0, 0, 0)")
@@ -152,7 +151,6 @@ def send_help():
         parse_mode='HTML')
 
 
-
 def wrong_message():
     global temp_message, temp_markup, temp_text
     bot.edit_message_text(
@@ -226,7 +224,6 @@ def help_markup():
     global temp_markup
     menu = InlineKeyboardMarkup(row_width=1)
     menu.add(InlineKeyboardButton(text=pwb_btn[lang_], callback_data='pwb'),
-             InlineKeyboardButton(text=pwf_btn[lang_], callback_data='pwf', switch_inline_query='play'),
              InlineKeyboardButton(text=diff_btn[lang_], callback_data='diff'),
              InlineKeyboardButton(text=lang_btn[lang_], callback_data='lang'),
              InlineKeyboardButton(text=stats_btn[lang_], callback_data='stats'))
@@ -238,7 +235,6 @@ def stats_markup():
     global temp_markup
     menu = InlineKeyboardMarkup(row_width=1)
     menu.add(InlineKeyboardButton(text=pwb_btn[lang_], callback_data='pwb'),
-             InlineKeyboardButton(text=pwf_btn[lang_], callback_data='pwf', switch_inline_query='play'),
              InlineKeyboardButton(text=diff_btn[lang_], callback_data='diff'),
              InlineKeyboardButton(text=lang_btn[lang_], callback_data='lang'),
              InlineKeyboardButton(text=help_btn[lang_], callback_data='help'))
@@ -256,7 +252,6 @@ class Easy:
         while not is_space_empty(rand_turn):
             rand_turn = choice(list(board.keys()))
         insertLetter(computer, rand_turn)
-
 
 
 class Hard:
@@ -400,7 +395,7 @@ def randomMove():
 
 
 # ==========telegram methods==========
-#primary_method
+# primary_method
 @bot.callback_query_handler(func=lambda call: call.data == 'pwb')
 def play_with_bot(call):
     global temp_message, temp_text
@@ -438,7 +433,6 @@ def update_board(call):
         bot.answer_callback_query(call.id, text=not_empty_txt[lang_], show_alert=True)
 
 
-#primary_method
 @bot.callback_query_handler(func=lambda call: call.data == 'diff')
 def difficulty(call):
     global temp_message, temp_text
@@ -461,7 +455,7 @@ def change_difficulty(call):
     stats_menu(0)
 
 
-#primary_method
+# primary_method
 @bot.callback_query_handler(func=lambda call: call.data == 'lang')
 def language(call):
     global temp_message, temp_text
@@ -473,14 +467,13 @@ def language(call):
         reply_markup=language_markup())
 
 
-
 @bot.callback_query_handler(func=lambda call: call.data in ['uz', 'en', 'ru'])
 def change_lang(call):
     update_language(call.data)
     help_menu(0)
 
 
-#primary_method
+# primary_method
 @bot.callback_query_handler(func=lambda call: call.data == 'stats')
 def stats_menu(call):
     global temp_message, temp_text
@@ -500,7 +493,7 @@ def stats_menu(call):
             parse_mode='HTML')
 
 
-#primary_method
+# primary_method
 @bot.callback_query_handler(func=lambda call: call.data == 'help')
 def help_menu(call):
     global temp_message, temp_text
