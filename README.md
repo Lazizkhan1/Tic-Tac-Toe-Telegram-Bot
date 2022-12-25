@@ -9,4 +9,4 @@ Bot works with [minimax](https://levelup.gitconnected.com/mastering-tic-tac-toe-
 23.08.2022
 I have planed create clone version of [@xoBot](https://t.me/xoBot) but I decided to stop this project. Reason I started study a diffrent direction.
 
-Bot works fine but higher higher latency.
+Bot works fine but much higher latency.
